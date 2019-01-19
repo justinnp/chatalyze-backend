@@ -21,7 +21,7 @@ var clients = [];
 
 io = socket(server);
 io.on('connection', (socket) => {
-    clients.push(client); 
+    clients.push(socket.client); 
     console.log(socket.id);
     socket.on('SEND_MESSAGE', (data) => {
         io.emit('RECIEVE_MESSAGE', data);
