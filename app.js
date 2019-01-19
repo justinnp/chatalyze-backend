@@ -18,7 +18,7 @@ app.use('/conversation', conversationRoutes);
 const server = app.listen(port, () => console.log('big ole yeet'));
 
 var users = [];
-
+var key = ''
 //on = listen for connection string
 //emit = send out connection string, gg 2ez
 io = socket(server);
@@ -32,6 +32,11 @@ io.on('connection', (socket) => {
     users.push(socket.username);
     console.log(users);
     io.emit('USER_ADDED', socket.username);
+    if(users.length === 2){
+      users.sort();
+      key = users[0] + '&' + users[1];
+      io.emit('CHAT_KEY', key);
+    }
   });
 });
 
