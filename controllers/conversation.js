@@ -22,6 +22,13 @@ exports.get_all_keys = (req, res) => {
     });
 }
 
+exports.get_all_transcript = (req, res) => {
+  convoRef.once('value')
+    .then(function (snap) {
+      res.json(snap.val());
+    });
+}
+
 exports.get_single_transcript = (req, res) => {
   var chatId = req.body.chatId;
   var someChatIdRef = convoRef.child(chatId);
