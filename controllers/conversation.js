@@ -1,6 +1,7 @@
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./../firebaseKey.json");
+var gcp_creds = require('./../gcp_key.json');
 
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
@@ -55,6 +56,25 @@ exports.update_transcript = (req, res) => {
      transcript : newChat
    });
    res.sendStatus(200);
-
+   analyze_message(newChat);
   });
+}
+
+function analyze_message(param) {
+  var obj =  {
+    "document":{
+      "type":"PLAIN_TEXT",
+      "content": param
+    },
+    "encodingType": "UTF8"
+  }
+  fetch(`https://language.googleapis.com/v1beta2/documents:analyzeSentiment?${gcp_creds.gcp_key}`, {
+    method: 'POST',
+    body: JSON.stringify(obj),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
 }
