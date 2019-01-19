@@ -17,12 +17,20 @@ app.use('/conversation', conversationRoutes);
 
 const server = app.listen(port, () => console.log('big ole yeet'));
 
+var clients = [];
+
 io = socket(server);
 io.on('connection', (socket) => {
+    clients.push(client); 
     console.log(socket.id);
     socket.on('SEND_MESSAGE', (data) => {
         io.emit('RECIEVE_MESSAGE', data);
     })
+});
+
+app.get('/get_clients', (req, res) => {
+  const obj = { "clients": clients}
+  res.json(obj);
 })
 
 
