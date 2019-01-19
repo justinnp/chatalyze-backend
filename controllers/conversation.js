@@ -23,7 +23,6 @@ exports.get_all_keys = (req, res) => {
 
 exports.get_single_transcript = (req, res) => {
   var chatId = req.body.chatId;
-
   var someChatIdRef = convoRef.child(chatId);
 
   someChatIdRef.once('value')
@@ -31,4 +30,23 @@ exports.get_single_transcript = (req, res) => {
       res.json(snap.val());
     });
 
+}
+
+exports.update_transcript = (req, res) => {
+  var chatId = req.body.chatId;
+  var someChatIdRef = convoRef.child(chatId);
+  var chatString = req.body.chatString;
+
+  // update convo
+  someChatIdRef.once('value')
+   .then(function (snap) {
+   console.log('payload:', snap.val());
+
+   var newChat = snap.val()['transcript'] + " " + chatString;
+   console.log(newChat);
+   someChatIdRef.update({
+     transcript : newChat
+   });
+
+  });
 }

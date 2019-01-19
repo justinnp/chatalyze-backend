@@ -24,10 +24,6 @@ exports.add_user = (req, res) => {
 exports.login = (req, res) => {
   var reqUserName = req.body.username;
   var reqPassword = req.body.password;
-
-  console.log("user: " + reqUserName);
-  console.log("pass: " + reqPassword);
-
   var somePersonRef = usersRef.child(reqUserName);
 
   somePersonRef.once('value')
@@ -52,25 +48,5 @@ exports.get_user = (req, res) => {
    .then(function (snap) {
    console.log('snap.val():', snap.val());
    res.json(snap.val());
-  });
-}
-
-exports.update_transcript = (req, res) => {
-  var name = "yeet";
-  var somePersonRef = usersRef.child(name);
-  var trans = "";
-
-
-  // update convo
-  somePersonRef.once('value')
-   .then(function (snap) {
-   console.log('snap.val():', snap.val());
-   trans = snap.val()['job'];
-   console.log(trans);
-   trans += " yoot this is a nother mf sentence.";
-
-   somePersonRef.update({
-     job : trans
-   });
   });
 }
