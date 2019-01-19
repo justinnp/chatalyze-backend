@@ -23,7 +23,8 @@ var key = ''
 //emit = send out connection string, gg 2ez
 io = socket(server);
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  const id_sock = socket.id;
+  console.log(id_sock);
   socket.on('SEND_MESSAGE', (data) => {
       io.emit('RECIEVE_MESSAGE', data);
   });
@@ -37,6 +38,14 @@ io.on('connection', (socket) => {
       key = users[0] + '&' + users[1];
       io.emit('CHAT_KEY', key);
     }
+  });
+  socket.on('USER_LEAVING', (user_who_left) => {
+    var index = users.indexOf(user_who_left);
+    if(index > -1){
+      users.splice(index, 1);
+    }
+    console.log(users);
+    socket.disconnect(1);
   });
 });
 
