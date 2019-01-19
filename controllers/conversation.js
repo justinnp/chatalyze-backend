@@ -1,5 +1,5 @@
 var admin = require("firebase-admin");
-
+const fetch = require('node-fetch');
 var serviceAccount = require("./../firebaseKey.json");
 var gcp_creds = require('./../gcp_key.json');
 
