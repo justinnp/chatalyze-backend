@@ -1,8 +1,14 @@
 const express = require('express');
+const cors = require('cors');
+const userRoutes = require('./routes/user');
 const port = process.env.PORT || 3001;
 
 app = express();
 
+app.use(cors())
+app.use('/user', userRoutes);
+
+//hello there
 app.get('/', (req,res) => {
     res.send('chatalyze backend');
 });
