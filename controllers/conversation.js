@@ -68,13 +68,13 @@ function analyze_message(param) {
     },
     "encodingType": "UTF8"
   }
-  fetch(`https://language.googleapis.com/v1beta2/documents:analyzeSentiment?${gcp_creds.gcp_key}`, {
+  fetch(`https://language.googleapis.com/v1beta2/documents:analyzeSentiment?key=${gcp_creds.gcp_key}`, {
     method: 'POST',
     body: JSON.stringify(obj),
     headers: {
-      'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
     }
-  })
-  .then(res => res.json())
-  .then(data => console.log(data))
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
 }
