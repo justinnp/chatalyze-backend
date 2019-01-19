@@ -18,12 +18,13 @@ app.use('/conversation', conversationRoutes);
 const server = app.listen(port, () => console.log('big ole yeet'));
 
 io = socket(server);
-io.path('/chat');
 io.on('connection', (socket) => {
-  socket.on('SEND_MESSAGE', (data) => {
-      io.emit('RECIEVE_MESSAGE', data);
-  })
+    console.log(socket.id);
+    socket.on('SEND_MESSAGE', (data) => {
+        io.emit('RECIEVE_MESSAGE', data);
+    })
 })
+
 
 
 //hello there
