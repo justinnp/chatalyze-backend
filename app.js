@@ -17,23 +17,23 @@ app.use('/conversation', conversationRoutes);
 
 const server = app.listen(port, () => console.log('big ole yeet'));
 
-var clients = [];
+var users = [];
 
+//on = listen for connection string
+//emit = send out connection string, gg 2ez
 io = socket(server);
 io.on('connection', (socket) => {
-    clients.push(socket.client); 
-    console.log(socket.id);
-    socket.on('SEND_MESSAGE', (data) => {
-        io.emit('RECIEVE_MESSAGE', data);
-    })
+  console.log(socket.id);
+  socket.on('SEND_MESSAGE', (data) => {
+      io.emit('RECIEVE_MESSAGE', data);
+  });
+  socket.on('SEND_USERNAME', (username) => {
+    socket.username = username;
+    users.push(socket.username);
+    console.log(users);
+    io.emit('USER_ADDED', socket.username);
+  });
 });
-
-app.get('/get_clients', (req, res) => {
-  const obj = { "clients": clients}
-  res.json(obj);
-})
-
-
 
 //hello there
 app.get('/', (req,res) => {

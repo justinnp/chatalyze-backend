@@ -30,11 +30,11 @@ exports.login = (req, res) => {
     .then(function (snap) {
       if(snap.val().password === reqPassword) {
          console.log(`User ${reqUserName} successfully logged in!`);
-         res.send(200);
+         res.sendStatus(200);
       }
       else {
         console.log("Wrong username or password");
-        res.send(400);
+        res.sendStatus(400);
       }
     });
 }
