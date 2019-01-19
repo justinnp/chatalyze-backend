@@ -18,6 +18,7 @@ exports.get_all_keys = (req, res) => {
         userLists.push(users.split("&"));
       }
       console.log(userLists);
+      res.json(userLists);
     });
 }
 
