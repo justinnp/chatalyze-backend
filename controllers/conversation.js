@@ -29,22 +29,20 @@ exports.get_all_transcript = (req, res) => {
     });
 }
 
-exports.get_single_transcript = (req, res) => {
-  var chatId = req.body.chatId;
+exports.clear = (req, res) => {
+  var chatId = req.body.key;
   var someChatIdRef = convoRef.child(chatId);
-
-  someChatIdRef.once('value')
-    .then(function (snap) {
-      res.json(snap.val());
-    });
-
+  someChatIdRef.update({
+    transcript : ""
+  });
+  console.log(`cleared conversation: ${chatId}`);
+  res.sendStatus(200);
 }
 
 exports.update_transcript = (req, res) => {
   var chatId = req.body.key;
   var chatString = req.body.message;
   var user = req.body.user;
-
   var someChatIdRef = convoRef.child(chatId);
   // update convo
   someChatIdRef.once('value')
