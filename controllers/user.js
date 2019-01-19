@@ -24,6 +24,10 @@ exports.add_user = (req, res) => {
 exports.login = (req, res) => {
   var reqUserName = req.body.username;
   var reqPassword = req.body.password;
+
+  console.log("user: " + reqUserName);
+  console.log("pass: " + reqPassword);
+
   var somePersonRef = usersRef.child(reqUserName);
 
   somePersonRef.once('value')
