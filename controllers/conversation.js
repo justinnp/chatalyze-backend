@@ -22,6 +22,13 @@ exports.get_all_keys = (req, res) => {
     });
 }
 
+exports.get_all_transcript = (req, res) => {
+  convoRef.once('value')
+    .then(function (snap) {
+      res.json(snap.val());
+    });
+}
+
 exports.get_single_transcript = (req, res) => {
   var chatId = req.body.chatId;
   var someChatIdRef = convoRef.child(chatId);
@@ -34,10 +41,11 @@ exports.get_single_transcript = (req, res) => {
 }
 
 exports.update_transcript = (req, res) => {
-  var chatId = req.body.chatId;
-  var someChatIdRef = convoRef.child(chatId);
-  var chatString = req.body.chatString;
+  var chatId = req.body.key;
+  var chatString = req.body.message;
+  var user = req.body.user;
 
+  var someChatIdRef = convoRef.child(chatId);
   // update convo
   someChatIdRef.once('value')
    .then(function (snap) {
@@ -48,6 +56,7 @@ exports.update_transcript = (req, res) => {
    someChatIdRef.update({
      transcript : newChat
    });
+   res.sendStatus(200);
 
   });
 }
