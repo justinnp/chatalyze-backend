@@ -3,6 +3,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/user');
 const conversationRoutes = require('./routes/conversation');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
 const port = process.env.PORT || 3001;
 
 app = express();
@@ -13,6 +14,16 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.use(cors())
 app.use('/user', userRoutes);
 app.use('/conversation', conversationRoutes);
+
+const server = app.listen(port, () => console.log('big ole yeet'));
+
+io = socket(server);
+io.path('/chat');
+io.on('connection', (socket) => {
+  socket.on('SEND_MESSAGE', (data) => {
+      io.emit('RECIEVE_MESSAGE', data);
+  })
+})
 
 
 //hello there
@@ -37,6 +48,3 @@ app.use((req, res, next) => {
   });
   //--------------------------------------------------------
 
-
-
-app.listen(port, () => console.log('big ole yeet'));
