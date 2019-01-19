@@ -12,7 +12,7 @@ var usersRef = db.ref('users/');
 
 /* ------------------ Registration. ------------------ */
 exports.add_user = (req, res) => {
-  console.log(`User ${req.body.username} create!`);
+  console.log(`User ${req.body.username} created!`);
   usersRef.update({
     [req.body.username] : {
       password : req.body.password,

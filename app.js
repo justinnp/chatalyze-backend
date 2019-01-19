@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/user');
+const conversationRoutes = require('./routes/conversation');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3001;
 
@@ -11,6 +12,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 
 app.use(cors())
 app.use('/user', userRoutes);
+app.use('/conversation', conversationRoutes);
 
 
 //hello there
@@ -34,5 +36,7 @@ app.use((req, res, next) => {
     });
   });
   //--------------------------------------------------------
+
+
 
 app.listen(port, () => console.log('big ole yeet'));
