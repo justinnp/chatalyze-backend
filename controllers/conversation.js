@@ -55,6 +55,7 @@ exports.update_transcript = (req, res) => {
    someChatIdRef.update({
      transcript : newChat
    });
+   res.send(200);
 
   });
 }
