@@ -48,10 +48,10 @@ exports.update_transcript = (req, res) => {
   // update convo
   someChatIdRef.once('value')
    .then(function (snap) {
-   console.log('payload:', snap.val());
+  //  console.log('payload:', snap.val());
 
    var newChat = snap.val()['transcript'] + " " + chatString;
-   console.log(newChat);
+  //  console.log(newChat);
    someChatIdRef.update({
      transcript : newChat
    });
