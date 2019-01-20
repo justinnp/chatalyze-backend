@@ -74,23 +74,35 @@ exports.update_transcript = (req, res) => {
        console.log("senti: " + sentiment);
        console.log("string: " + chatString);
 
-       var details = snap.val().details;
-
+       var snapVal = snap.val();
        // this is if the conversation is cleared.
        // we need something to push to.
-       if(details == undefined) {
-         details = [];
+       if(snapVal == null) {
+         console.log("yo its null");
+         var detailsData = [{
+           "magnitude" : magnitude,
+           "sentiment" : sentiment,
+           "chatString": chatString
+         }];
+
+         convoRef.update({
+           [chatId] : {
+             details : detailsData
+           }
+         });
        }
+       else {
+         var detailsData = snap.val().details;
+         detailsData.push({
+           "magnitude" : magnitude,
+           "sentiment" : sentiment,
+           "chatString": chatString
+         });
 
-       details.push({
-         "magnitude" : magnitude,
-         "sentiment" : sentiment,
-         "chatString": chatString
-       });
-
-       someChatIdRef.update({
-         details : details
-       });
+         someChatIdRef.update({
+           details : detailsData
+         });
+       }
 
        res.sendStatus(200);
      });
