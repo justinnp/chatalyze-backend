@@ -56,7 +56,7 @@ exports.update_transcript = (req, res) => {
      transcript : newChat
    });
    res.sendStatus(200);
-   analyze_message(newChat);
+   analyze_message(chatString);
   });
 }
 
