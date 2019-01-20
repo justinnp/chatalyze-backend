@@ -34,7 +34,7 @@ exports.clear = (req, res) => {
   var chatId = req.body.key;
   var someChatIdRef = convoRef.child(chatId);
   someChatIdRef.update({
-    transcript : ""
+    details : ""
   });
   console.log(`cleared conversation: ${chatId}`);
   res.sendStatus(200);
@@ -48,33 +48,51 @@ exports.update_transcript = (req, res) => {
   // update convo
   someChatIdRef.once('value')
    .then(function (snap) {
-  //  console.log('payload:', snap.val());
+   console.log('payload:', snap.val());
 
-   var newChat = snap.val()['transcript'] + " " + chatString;
-  //  console.log(newChat);
-   someChatIdRef.update({
-     transcript : newChat
-   });
-   res.sendStatus(200);
-   analyze_message(chatString);
+
+   var obj =  {
+     "document":{
+       "type":"PLAIN_TEXT",
+       "content": chatString
+     },
+     "encodingType": "UTF8"
+   }
+   fetch(`https://language.googleapis.com/v1beta2/documents:analyzeSentiment?key=${gcp_creds.gcp_key}`, {
+     method: 'POST',
+     body: JSON.stringify(obj),
+     headers: {
+         'Content-Type': 'application/json'
+     }
+     })
+     .then((data) => data.json())
+     .then((datajson) => {
+       var magnitude = datajson.documentSentiment.magnitude;
+       var sentiment = datajson.documentSentiment.score;
+
+       console.log("mag: " + magnitude);
+       console.log("senti: " + sentiment);
+       console.log("string: " + chatString);
+
+       var details = snap.val().details;
+
+       // this is if the conversation is cleared.
+       // we need something to push to.
+       if(details == undefined) {
+         details = [];
+       }
+
+       details.push({
+         "magnitude" : magnitude,
+         "sentiment" : sentiment,
+         "chatString": chatString
+       });
+
+       someChatIdRef.update({
+         details : details
+       });
+
+       res.sendStatus(200);
+     });
   });
-}
-
-function analyze_message(param) {
-  var obj =  {
-    "document":{
-      "type":"PLAIN_TEXT",
-      "content": param
-    },
-    "encodingType": "UTF8"
-  }
-  fetch(`https://language.googleapis.com/v1beta2/documents:analyzeSentiment?key=${gcp_creds.gcp_key}`, {
-    method: 'POST',
-    body: JSON.stringify(obj),
-    headers: {
-        'Content-Type': 'application/json'
-    }
-    })
-    .then(res => res.json())
-    .then(data => console.log(data))
 }
